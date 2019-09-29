@@ -11,12 +11,12 @@
               <v-list-item-title>{{item.title}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-action v-if="isUserLoggedIn" @click="onLogout">
+          <v-list-item @click="onLogout">
+            <v-list-item-action v-if="isUserLoggedIn">
               <v-icon>mdi-logout</v-icon>
             </v-list-item-action>
             <v-list-item-content v-if="isUserLoggedIn">
-              <v-list-item-title>Logout</v-list-item-title>
+              <v-list-item-title>Выйти</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>

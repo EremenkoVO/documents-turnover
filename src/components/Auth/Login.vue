@@ -46,7 +46,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="onSubmit" :loading="loading">Войти</v-btn>
+                <v-btn color="primary" @click="onSubmit" :loading="loading" :disabled="!valid || loading">Войти</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -86,9 +86,7 @@ export default {
               .then(() => {
                 this.$router.push('/main');
               })
-              .catch((err) => {
-                  this.$store.dispatch('setError', err.message)
-                });
+              .catch(() => {});
             }
         }
     },

@@ -20,6 +20,7 @@ export default {
     async registerUser ({commit}, {email, password}) {
       commit('clearError');
       commit('setLoading', true);
+      
       try {
         const user = await fb.auth().createUserWithEmailAndPassword(email, password);
         commit('setUser', new User(user.uid));
@@ -33,10 +34,13 @@ export default {
     
     // Авторизация пользователя
     async loginUser ({commit}, {email, password}) {
+      commit('clearError')
+      commit('setLoading', true)
       try {
         const user = await fb.auth().signInWithEmailAndPassword(email, password);
-        commit('setUser', new User(user.uid));
-        localStorage.user = user;
+        if (user.uid != null) {
+          commit('setUser', new User(user.uid));
+        }
         commit('setLoading', false);
       } catch (error) {
         commit('setLoading', false);
@@ -45,29 +49,25 @@ export default {
       }
     },
 
-    // автоматический вход пользоватея
+    // Автоматический вход пользоватея
     autoLoginUser({commit}, payload) {
       commit('setUser', new User(payload.uid));
     },
 
     // Выход пользователя
     logoutUser({commit}) {
-      localStorage.removeItem('user');
       fb.auth().signOut();
       commit('setUser', null);
     }
   },
   getters: {
     user (state) {
-      if (state.user === null) {
-        state.user = localStorage.user;
-      }
       return state.user;
     },
 
-    // state user login
+    // Сотояние пользователя
     isUserLoggedIn (state) {
-      return state.user.id !== null;
+      return state.user !== null;
     }
   }
 };

@@ -5,6 +5,7 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn
+            id="addrequest"
             color="primary"
             dark
             v-on="on"
@@ -81,6 +82,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  #addrequest{
+    margin-bottom: 15px;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
       <add-document></add-document>
     <v-card>
         <v-card-title id="mainTable">
@@ -16,13 +16,13 @@
             </v-card-title>
                 <v-data-table
                 :headers="headers"
-                :items="documents"
+                :items="request"
                 :search="search"
                 :items-per-page="5"
                 class="elevation-1">
             </v-data-table>
         </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -38,16 +38,26 @@ export default {
         search: null,
         headers: [
             {
-                text: '№ Документа',
+                text: '№ Заявки',
                 align: 'left',
                 sortable: false,
                 value: 'id',
             },
-            {text: 'Владелец', value: 'owner'},
+            {text: 'Наименование заявки', value: 'name'},
+            {text: 'Описание заявки', value: 'description'},
+            {text: 'Владелец', value: 'ownerId'},
             {text: 'Дата создания', value: 'date_create'},
-            {text: 'Дата подтверждения', value: 'date_confirm'}
+            {text: 'Дата подтверждения', value: 'date_confirm'},
+            
         ],
-        documents: [],
+        }
+    },
+    computed: {
+        request () {
+            return this.$store.getters.requests;
+        },
+        user() {
+            return this.$store.getters.user;
         }
     }
 }
