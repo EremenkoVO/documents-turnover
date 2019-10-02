@@ -84,7 +84,7 @@ export default {
               }
               this.$store.dispatch('loginUser', user)
               .then(() => {
-                this.$router.push('/main');
+                this.$router.push('/requests');
               })
               .catch(() => {});
             }

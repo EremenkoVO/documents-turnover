@@ -62,7 +62,26 @@
             text
             @click.native="closeError"
           >
-            Close
+            Закрыть
+          </v-btn>
+        </v-snackbar>
+      </template>
+
+      <template v-if="success">
+        <v-snackbar
+          :timeout="5000"
+          :multi-line="true"
+          @input="closeSuccess"
+          color="primary"
+          :value="true"
+          >
+            {{ success }}
+          <v-btn
+            color="dark"
+            text
+            @click.native="closeSuccess"
+          >
+            Закрыть
           </v-btn>
         </v-snackbar>
       </template>
@@ -80,16 +99,23 @@ export default {
     }),
     computed: {
       error () {
-        return this.$store.getters.error
+        return this.$store.getters.error;
+      },
+
+      success () {
+        return this.$store.getters.success;
       },
 
       isUserLoggedIn () {
-        return this.$store.getters.isUserLoggedIn
+        return this.$store.getters.isUserLoggedIn;
       },
 
       links () {
         if (this.isUserLoggedIn) {
-          return []
+          return [
+            {title: 'Заявки', icon:'mdi-table', url:'/requests'},
+            {title: 'Профиль', icon: 'mdi-account', url: '/profile'}
+          ]
         }
         return [
         { title: 'Авторизация', icon: 'mdi-account', url: '/login' },
@@ -109,7 +135,11 @@ export default {
       },
 
       closeError () {
-        this.$store.dispatch('clearError')
+        this.$store.dispatch('clearError');
+      },
+
+      closeSuccess () {
+        this.$store.dispatch('clearSuccess');
       }
   },
 };

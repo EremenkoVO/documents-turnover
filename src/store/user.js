@@ -34,8 +34,8 @@ export default {
     
     // Авторизация пользователя
     async loginUser ({commit}, {email, password}) {
-      commit('clearError')
-      commit('setLoading', true)
+      commit('clearError');
+      commit('setLoading', true);
       try {
         const user = await fb.auth().signInWithEmailAndPassword(email, password);
         if (user.uid != null) {

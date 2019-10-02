@@ -4,11 +4,12 @@ import vuetify from './plugins/vuetify';
 import router from './route';
 import store from './store';
 import * as fb from 'firebase'; 
+import * as moment from 'moment';
 
 Vue.config.productionTip = false;
 
 new Vue({
-  vuetify, router, store,
+  vuetify, router, store, moment,
   render: h => h(App),
   created () {
     // Конфиг для инициализции firebase
@@ -29,7 +30,5 @@ new Vue({
         this.$store.dispatch('autoLoginUser', user);
       }
     });
-
-    this.$store.dispatch('fetchDocuments');
   },
 }).$mount('#app');
