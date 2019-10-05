@@ -1,14 +1,15 @@
 import * as fb from 'firebase';
 
 class User {
-  constructor (id) {
+  constructor (id, email) {
     this.id = id;
+    this.email = email;
   }
 }
 
 export default {
   state: {
-    user: null
+    user: []
   },
   mutations: {
     setUser (state, payload) {
@@ -23,7 +24,7 @@ export default {
       
       try {
         const user = await fb.auth().createUserWithEmailAndPassword(email, password);
-        commit('setUser', new User(user.uid));
+        commit('setUser', new User(user.uid, user.email));
         commit('setLoading', false);
       } catch (error) {
         commit('setLoading', false);
@@ -39,7 +40,7 @@ export default {
       try {
         const user = await fb.auth().signInWithEmailAndPassword(email, password);
         if (user.uid != null) {
-          commit('setUser', new User(user.uid));
+          commit('setUser', new User(user.uid, user.email));
         }
         commit('setLoading', false);
       } catch (error) {
@@ -51,7 +52,7 @@ export default {
 
     // Автоматический вход пользоватея
     autoLoginUser({commit}, payload) {
-      commit('setUser', new User(payload.uid));
+      commit('setUser', new User(payload.uid, payload.email));
     },
 
     // Выход пользователя

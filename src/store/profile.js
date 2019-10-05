@@ -22,7 +22,7 @@ export default {
         loadProfiles(state, payload) {
             state.profile = payload;
         },
-        updateAd (state, {nameUser, secondName, patronymic, ownerId, id}) {
+        updateAd (state, {id, nameUser, secondName, patronymic}) {
             const profile = state.profile.find(a => {
               return a.id === id;
             });
@@ -30,8 +30,6 @@ export default {
             profile.nameUser = nameUser;
             profile.secondName = secondName;
             profile.patronymic = patronymic;
-            profile.ownerId = ownerId;
-            profile.id = id;
           }
     },
     actions: {
@@ -66,7 +64,7 @@ export default {
             }
         },
 
-        async updateProfile({commit}, {id, nameUser, secondName, patronymic, ownerId}) {
+        async updateProfile({commit}, {id, nameUser, secondName, patronymic}) {
             commit('clearError');
             commit('setLoading', true);
 
@@ -74,8 +72,7 @@ export default {
                 await fb.database().ref('profiles').child(id).update({
                     nameUser, 
                     secondName, 
-                    patronymic, 
-                    ownerId
+                    patronymic
                 });
 
                 commit('setLoading', false);

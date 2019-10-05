@@ -89,7 +89,7 @@ export default {
     }),
     computed: {
       loading () {
-        return this.$store.getters.loading
+        return this.$store.getters.loading;
       }
     },
     methods: {

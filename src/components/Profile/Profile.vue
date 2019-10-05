@@ -17,7 +17,8 @@ export default {
         return {
             nameUser: null,
             secondName: null,
-            patronymic: null
+            patronymic: null,
+            check: null
         }
     },
     computed: {
@@ -33,13 +34,25 @@ export default {
     },
     methods: {
         updateProfile() {
-            this.$store.dispatch('updateProfile', {
-                id: this.profile.id,
-                nameUser: this.nameUser,
-                secondName: this.secondName,
-                patronymic: this.patronymic,
-                ownerId: this.profile.ownerId
-            });
+            if (this.check) {
+                this.$store.dispatch('updateProfile', {
+                    id: this.profile.id,
+                    nameUser: this.nameUser,
+                    secondName: this.secondName,
+                    patronymic: this.patronymic
+                });
+            }
+            else {
+                const profile = {
+                    nameUser: this.nameUser,
+                    secondName: this.secondName,
+                    patronymic: this.patronymic,
+                    ownerId: this.user
+                };
+
+                this.$store.dispatch('setProfile', profile);
+            }
+            
         },
 
         // Получение информации о пользователе
@@ -51,6 +64,10 @@ export default {
                     this.nameUser = this.profile[i].nameUser;
                     this.secondName = this.profile[i].secondName;
                     this.patronymic = this.profile[i].patronymic;
+                    this.check = true;
+                }
+                else {
+                    this.check = false;
                 }
             }
         }

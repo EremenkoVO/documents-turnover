@@ -120,7 +120,7 @@ export default {
         return [
         { title: 'Авторизация', icon: 'mdi-account', url: '/login' },
         { title: 'Регистрация', icon: 'mdi-lock', url: '/registration' }]
-      },
+      }
     },
     methods: {
       goBack () {

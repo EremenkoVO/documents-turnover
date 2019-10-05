@@ -67,8 +67,8 @@ export default {
             descriptionRequest: null,
             nameRequest: null,
             dateCreate: moment().format('L'),
-            dateConfirm: null,
-            state: 1 
+            dateConfirm: '',
+            status: 1 
         }
     },
     computed: {
@@ -83,7 +83,8 @@ export default {
                 descriptionRequest: this.descriptionRequest,
                 dateCreate: this.dateCreate,
                 dateConfirm: this.dateConfirm,
-                state: this.state
+                status: this.status,
+                fileSrc: ''
             };
 
             this.$store.dispatch('createdRequest', request);

@@ -1,13 +1,14 @@
 import * as fb from 'firebase';
 
 class Request{
-    constructor(name, description, ownerId, dateCreate, dateConfirm, state, id = null) {
+    constructor(name, description, ownerId, dateCreate, dateConfirm, status, fileSrc = '', id = null) {
         this.name = name;
         this.description = description;
         this.ownerId = ownerId;
         this.dateCreate = dateCreate;
         this.dateConfirm = dateConfirm;
-        this.state = state;
+        this.status = status;
+        this.fileSrc = fileSrc;
         this.id = id;
     }
 }
@@ -22,7 +23,15 @@ export default {
         },
         loadRequests(state, payload) {
             state.requests = payload;
-        }
+        },
+        updateRequest (state, {status, file, id}) {
+            const request = state.requests.find(a => {
+              return a.id === id
+            });
+      
+            request.state = status;
+            request.file = file;
+          }
     },
     actions: {
         // Создания заявки
@@ -37,7 +46,8 @@ export default {
                         getters.user.id,
                         payload.dateCreate,
                         payload.dateConfirm,
-                        payload.state
+                        payload.status,
+                        ''
                     );
 
                 const request = fb.database().ref('requests').push(newRequest);
@@ -50,6 +60,30 @@ export default {
 
                 commit('clearSuccess');
                 commit('setSuccess', 'Заявка создана');
+            }
+            catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                throw error;
+            }
+        },
+
+        async updateRequest({commit}, {status, file, id}) {
+            commit('clearError');
+            commit('setLoading', true);
+
+            try {
+                const fileExt = file.name.slice(file.name.lastIndexOf('.'));
+                const fileData = await fb.storage().ref(`documents/${id}.${fileExt}`).put(file);
+                const fileSrc = await fb.storage().ref().child(fileData.ref.fullPath).getDownloadURL()
+
+                await fb.database().ref('requests').child(id).update({
+                    fileSrc,
+                    status
+                  })
+
+                commit('setLoading', false);
+                commit('updateRequest', {status, file, id})
             }
             catch (error) {
                 commit('setError', error.message);
@@ -72,7 +106,7 @@ export default {
                Object.keys(requests).forEach(key => {
                    const request = requests[key];
                    resultRequest.push(
-                       new Request(request.name, request.description, request.ownerId, request.dateCreate, request.dateConfirm, request.state, key)
+                       new Request(request.name, request.description, request.ownerId, request.dateCreate, request.dateConfirm, request.status, request.fileSrc, key)
                     );
                });
 
@@ -109,7 +143,7 @@ export default {
 
         requestById (state) {
             return requestId => {
-                return state.ads.find(request => request.id === requestId);
+                return state.requests.find(requests => requests.id === requestId);
             };
         }
     }

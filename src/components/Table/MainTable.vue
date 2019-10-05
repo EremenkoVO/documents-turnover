@@ -21,7 +21,7 @@
             <td>{{ getUserName(item.ownerId) }}</td>
             <td>{{ item.dateCreate }}</td>
             <td>{{ item.dateConfirm }}</td>
-            <td>{{ getStatus(item.state) }}</td>
+            <td>{{ getStatus(item.status) }}</td>
             <td><v-btn class="btn-table" color="primary" :to="'/request/' + item.id"><v-icon>mdi-open-in-new</v-icon></v-btn>
                 <v-btn class="btn-table" color="primary" @click="deleteRequest(item.id)"><v-icon>mdi-delete</v-icon></v-btn>
             </td>
@@ -38,7 +38,6 @@ import dictionary from '../../config/dictionary';
 
 export default {
     name: 'MainTable',
-    props: ['id'],
     components: {
       AddRequest
     },
@@ -48,7 +47,7 @@ export default {
             nameRequest: null,
             dateCreate: '01.10.2019',
             dateConfirm: null,
-            state: 1,
+            status: 1,
             search: null,
             dict: dictionary.stateDictionary,
         }
@@ -73,8 +72,8 @@ export default {
     },
     methods: {
         // Получение статуса
-        getStatus(state) {
-          return this.dict[state];
+        getStatus(status) {
+          return this.dict[status];
         },
 
         // Получение информации о пользователе
