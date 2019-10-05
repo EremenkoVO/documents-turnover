@@ -5,7 +5,7 @@
             <v-text-field v-model="nameUser" label="Имя"></v-text-field>
             <v-text-field v-model="secondName" label="Фамилия"></v-text-field>
             <v-text-field v-model="patronymic" label="Отчество"></v-text-field>
-            <v-btn color="primary" @click="updateProfile">Сохранить</v-btn>
+            <v-btn color="primary" @click="createProfile">Сохранить</v-btn>
           </v-container>
       </v-card>
   </v-container>
@@ -13,7 +13,6 @@
 
 <script>
 export default {
-    props: ['id'],
     data () {
         return {
             nameUser: null,
@@ -25,36 +24,23 @@ export default {
         loading () {
             return this.$store.getters.loading;
         },
-        profile () {
-            const id = this.id
-            return this.$store.getters.profileById(id);
-        },
         user () {
             return this.$store.getters.user.id;
         }
     },
     methods: {
-        updateProfile() {
-            this.$store.dispatch('updateProfile', {
-                id: this.profile.id,
+        createProfile() {
+            const profile = {
                 nameUser: this.nameUser,
                 secondName: this.secondName,
-                patronymic: this.patronymic
-            });
-        },
+                patronymic: this.patronymic,
+                ownerId: this.user
+            }
 
-        getProfile() {
-            this.nameUser = this.profile.nameUser;
-            this.secondName = this.profile.secondName;
-            this.patronymic = this.profile.patronymic;
+            this.$store.dispatch('setProfile', profile);
+            this.$router.push('/requests');
         }
-    },
-    mounted () {
-        this.getProfile();
-    },
-    created() {
-        this.$store.dispatch('fetchProfile');
-    },
+    }
 }
 </script>
 

@@ -7,6 +7,7 @@ import Registration from '@/components/Auth/Registration';
 import MainTable from '@/components/Table/MainTable';
 import Request from '@/components/Table/Request';
 import Profile from '@/components/Profile/Profile';
+import CreateProfile from '@/components/Profile/CreateProfile';
 
 Vue.use(VueRouter);
 
@@ -41,10 +42,16 @@ export default new VueRouter({
             beforeEnter: AuthGuard
         },
         {
-            path: '/profile',
+            path: '/profile/:id',
+            props: true,
             name: 'Profile',
             component: Profile,
             beforeEnter: AuthGuard
+        },
+        {
+            path: '/CreateProfile',
+            name: 'CreateProfile',
+            component: CreateProfile
         }
         
     ],

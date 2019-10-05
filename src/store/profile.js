@@ -117,6 +117,12 @@ export default {
     getters: {
         profiles (state) {
             return state.profile;
+        },
+
+        profileById(state) {
+            return profileId => {
+                return state.profile.find(profile => profile.ownerId === profileId);
+            }
         }
     }
 };

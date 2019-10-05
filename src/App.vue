@@ -110,11 +110,15 @@ export default {
         return this.$store.getters.isUserLoggedIn;
       },
 
+      user () {
+        return this.$store.getters.user.id;
+      },
+
       links () {
         if (this.isUserLoggedIn) {
           return [
             {title: 'Заявки', icon:'mdi-table', url:'/requests'},
-            {title: 'Профиль', icon: 'mdi-account', url: '/profile'}
+            {title: 'Профиль', icon: 'mdi-account', url: '/profile/' + this.user}
           ]
         }
         return [

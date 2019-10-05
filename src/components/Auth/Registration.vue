@@ -101,7 +101,7 @@ export default {
           }
           this.$store.dispatch('registerUser', user)
             .then(() => {
-                this.$router.push('/')
+                this.$router.push('/CreateProfile')
               })
               .catch((err) => {
                 this.$store.dispatch('setError', err.message)
