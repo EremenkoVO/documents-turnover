@@ -36,10 +36,11 @@
 
           <v-stepper-content step="2">
             <v-card height="600px">
-              
+              <v-btn :href="downloadDocument()" download target="blank">Скачать документ</v-btn>
+              <v-btn>Подтвердить документ</v-btn>
             </v-card>
+            
           </v-stepper-content>
-
           <v-stepper-content step="3">
             <v-card height="600px">
             </v-card>            
@@ -53,10 +54,11 @@
 
 export default {
     name: 'Request',
-    props: ['id'],
+    props: ['id', 'user'],
     date () {
         return {
-          file: []
+          file: [],
+          status: null
         }
     },
     computed: {
@@ -93,6 +95,10 @@ export default {
           this.$store.dispatch('clearError');
           this.$store.dispatch('setError', 'Загрузите файл');
         }
+      },
+
+      downloadDocument() {
+        return this.request.fileSrc;
       }
     }
 }
