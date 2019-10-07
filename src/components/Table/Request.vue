@@ -37,7 +37,7 @@
           <v-stepper-content step="2">
             <v-card height="600px">
               <v-btn :href="downloadDocument()" download target="blank">Скачать документ</v-btn>
-              <v-btn>Подтвердить документ</v-btn>
+              <v-btn @click="confirmDocument(3)">Подтвердить документ</v-btn>
             </v-card>
             
           </v-stepper-content>
@@ -80,6 +80,9 @@ export default {
         this.file = this.$refs.file.files[0];
       },
 
+      /**
+       * Загрузить документ
+       */
       upload() {
         if (this.file != null) {
 
@@ -97,8 +100,20 @@ export default {
         }
       },
 
+      /**
+       * Скачать документ
+       */
       downloadDocument() {
         return this.request.fileSrc;
+      },
+
+      /**
+       * Подтверждение документов
+       */
+      confirmDocument(status) {
+        const id = this.request.id;
+
+        this.$store.dispatch('updateStatusRequest', {status, id});
       }
     }
 }
