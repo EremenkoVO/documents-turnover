@@ -26,15 +26,26 @@ export default {
         },
         updateRequest (state, {status, file, id}) {
             const request = state.requests.find(a => {
-              return a.id === id
+                return a.id === id;
             });
-      
+        
             request.state = status;
             request.file = file;
-          }
+        },
+        setUpdateStatus(state, {status, id}) {
+            const request = state.requests.find(a => {
+                return a.id === id;
+            });
+        
+            request.state = status;
+        }
     },
     actions: {
-        // Создания заявки
+        /**
+         * Создание заявки
+         * @param {*} commit 
+         * @param {*} payload 
+         */
         async createdRequest({commit, getters}, payload) {
             commit('clearError');
             commit('setLoading', true);
@@ -68,6 +79,11 @@ export default {
             }
         },
 
+        /**
+         * Обновление заявки
+         * @param {*} commit
+         * @param {*} payload 
+         */
         async updateRequest({commit}, {status, file, id}) {
             commit('clearError');
             commit('setLoading', true);
@@ -75,15 +91,15 @@ export default {
             try {
                 const fileExt = file.name.slice(file.name.lastIndexOf('.'));
                 const fileData = await fb.storage().ref(`documents/${id}.${fileExt}`).put(file);
-                const fileSrc = await fb.storage().ref().child(fileData.ref.fullPath).getDownloadURL()
+                const fileSrc = await fb.storage().ref().child(fileData.ref.fullPath).getDownloadURL();
 
                 await fb.database().ref('requests').child(id).update({
                     fileSrc,
                     status
-                  })
+                  });
 
                 commit('setLoading', false);
-                commit('updateRequest', {status, file, id})
+                commit('updateRequest', {status, file, id});
             }
             catch (error) {
                 commit('setError', error.message);
@@ -92,7 +108,36 @@ export default {
             }
         },
 
-        // Получение документов
+        /**
+         * Обновление статуса заявки
+         * @param {*} commit
+         * @param {*} payload 
+         */
+        async updateStatusRequest ({commit}, {status, id}) {
+            commit('clearError');
+            commit('setLoading', true);
+
+            try {
+                await fb.database().ref('requests').child(id).update({
+                    status
+                });
+
+                commit('setLoading', false);
+                commit('setUpdateStatus', {status, id});
+                commit('clearSuccess');
+                commit('setSuccess', 'Успешно обновленно');
+            }
+            catch (error) {
+                commit('setError', error.message);
+                commit('setLoading', false);
+                throw error;
+            }
+        },
+
+        /**
+         * Получение заявок
+         * @param {*} commit 
+         */
         async fetchRequest({commit}) {
             commit('clearError');
             commit('setLoading', true);
@@ -120,7 +165,11 @@ export default {
             }
         },
 
-        // Удаление заявки
+        /**
+         * Удаление заявки
+         * @param {*} commit 
+         * @param {*} payload 
+         */
         async deleteRequest({commit}, payload) {
             commit('clearError');
             commit('setLoading', true);
