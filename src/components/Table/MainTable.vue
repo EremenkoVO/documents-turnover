@@ -45,7 +45,7 @@ export default {
         return {
             descriptionRequest: null,
             nameRequest: null,
-            dateCreate: '01.10.2019',
+            dateCreate: null,
             dateConfirm: null,
             status: 1,
             search: null,
