@@ -14,7 +14,7 @@
               <h3>Наименование заявки: {{request.name}}</h3>
               <h3>Описание заявки: {{request.description}}</h3>
 
-              <div>
+              <div class="mx-auto">
                 <input type="file" class="btn" ref="file1" @change="setFile">
               </div>
 
@@ -26,13 +26,19 @@
             <v-card height="600px">
               <h3>Наименование заявки: {{request.name}}</h3>
               <h3>Описание заявки: {{request.description}}</h3>
-              <v-btn :href="downloadDocument()" download target="blank">Скачать документ</v-btn>
-              <v-btn @click="confirmDocument(3)">Подтвердить документ</v-btn>
-              <label>Загрузить подписанный документ</label>
               <div>
-                <input type="file" class="btn" ref="file2" @change="setFile">
+                <v-btn :href="downloadDocument()" download color="warning" target="blank">Скачать документ</v-btn>
               </div>
-              <v-btn @click="upload(3)">Загрузить документ</v-btn>
+              <div>
+                <label>Загрузить подписанный документ</label>
+                <div>
+                  <input type="file" class="btn" ref="file2" @change="setFile">
+                </div>
+                <v-btn @click="upload(2)">Загрузить документ</v-btn>
+              </div>
+              <div>
+                <v-btn @click="confirmDocument(3)" color="primary">Подтвердить документ</v-btn>
+              </div>
             </v-card>
             
           </v-stepper-content>
@@ -40,7 +46,7 @@
             <v-card height="600px">
               <h3>Наименование заявки: {{request.name}}</h3>
               <h3>Описание заявки: {{request.description}}</h3>
-              <v-btn :href="downloadDocument()" download target="blank">Скачать готовый документ</v-btn>
+              <v-btn :href="downloadDocument()" download target="blank" color="primary">Скачать готовый документ</v-btn>
             </v-card>            
           </v-stepper-content>
       </v-stepper-items>
@@ -49,10 +55,9 @@
 </template>
 
 <script>
-
 export default {
     name: 'Request',
-    props: ['id', 'user'],
+    props: ['id'],
     date () {
         return {
           file: [],
@@ -111,7 +116,12 @@ export default {
       confirmDocument(status) {
         const id = this.request.id;
 
-        this.$store.dispatch('updateStatusRequest', {status, id});
+        if (this.file != null) {
+          this.$store.dispatch('updateStatusRequest', {status, id});
+        }
+        else {
+          this.$store.dispatch('setError', 'Необходимо загрузить подписанный документ');
+        }
       }
     }
 }

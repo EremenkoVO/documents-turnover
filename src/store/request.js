@@ -1,4 +1,7 @@
 import * as fb from 'firebase';
+import moment from 'moment';
+
+moment.locale('ru');
 
 class Request{
     constructor(name, description, ownerId, dateCreate, dateConfirm, status, fileSrc = '', id = null) {
@@ -32,12 +35,13 @@ export default {
             request.state = status;
             request.file = file;
         },
-        setUpdateStatus(state, {status, id}) {
+        setUpdateStatus(state, {status, dateConfirm, id}) {
             const request = state.requests.find(a => {
                 return a.id === id;
             });
         
             request.state = status;
+            request.dateConfirm = dateConfirm;
         }
     },
     actions: {
@@ -118,12 +122,15 @@ export default {
             commit('setLoading', true);
 
             try {
+                var dateConfirm = moment().format('L');
+
                 await fb.database().ref('requests').child(id).update({
-                    status
+                    status,
+                    dateConfirm
                 });
 
                 commit('setLoading', false);
-                commit('setUpdateStatus', {status, id});
+                commit('setUpdateStatus', {status, dateConfirm, id});
                 commit('clearSuccess');
                 commit('setSuccess', 'Успешно обновленно');
             }

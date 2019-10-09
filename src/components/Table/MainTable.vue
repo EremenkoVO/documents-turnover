@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <add-request></add-request>
-    <v-simple-table>
+    <v-simple-table style="height: 80%; position: relative">
       <template v-slot:default>
         <thead>
           <tr>
